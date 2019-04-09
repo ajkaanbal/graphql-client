@@ -6,7 +6,7 @@ WORKDIR /srv/app
 
 COPY . .
 
-RUN apk add bash && npm install
+RUN apk add bash jq && npm install
 
 CMD ["node", "client.js"]
 

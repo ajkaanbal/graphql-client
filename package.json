@@ -22,6 +22,7 @@
   "dependencies": {
     "apollo-cache-inmemory": "^1.5.1",
     "apollo-client": "^2.5.1",
+    "apollo-link-error": "^1.1.10",
     "apollo-link-http": "^1.5.14",
     "commander": "^2.20.0",
     "debug": "^4.1.1",
