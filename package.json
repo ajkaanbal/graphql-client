@@ -1,0 +1,32 @@
+{
+  "name": "graphql-client",
+  "version": "0.1.0",
+  "description": "",
+  "main": "client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ajkaanbal/graphql-client.git"
+  },
+  "keywords": [
+    "graphql"
+  ],
+  "author": "Ricardo M. Vilchis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ajkaanbal/graphql-client/issues"
+  },
+  "homepage": "https://github.com/ajkaanbal/graphql-client#readme",
+  "dependencies": {
+    "apollo-cache-inmemory": "^1.5.1",
+    "apollo-client": "^2.5.1",
+    "apollo-link-http": "^1.5.14",
+    "commander": "^2.20.0",
+    "debug": "^4.1.1",
+    "graphql": "^14.2.1",
+    "graphql-tag": "^2.10.1",
+    "node-fetch": "^2.3.0"
+  }
+}
