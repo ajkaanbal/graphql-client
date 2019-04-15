@@ -1,18 +1,20 @@
 const fetch = require('node-fetch')
-const {ApolloClient} = require("apollo-client")
+const {ApolloClient} = require('apollo-client')
+const { SubscriptionClient } = require('subscriptions-transport-ws')
+const { WebSocketLink } = require('apollo-link-ws')
 const { InMemoryCache } = require('apollo-cache-inmemory')
-const debug = require("debug")("graphql-client")
-const gql = require("graphql-tag")
+const debug = require('debug')('graphql-client')
+const gql = require('graphql-tag')
 const { createHttpLink } = require('apollo-link-http')
 const { onError } = require('apollo-link-error')
 const { IntrospectionFragmentMatcher } = require('apollo-cache-inmemory')
+const ws = require('ws')
+const util = require('util')
 
 const program = require("commander")
 
 const errorLink = onError(({ networkError }) => {
-  if (networkError.statusCode === 401) {
-    debug('networkError :', networkError)
-  }
+  debug('networkError :', networkError)
 })
 const get_schema = (uri, token) => {
   return fetch(`${uri}`, {
@@ -82,6 +84,25 @@ const mutate = (uri, token, query_string, variables) => {
     .catch(debug)
 }
 
+const subscribe = (uri, token, query_string, variables) => {
+  const cache = new InMemoryCache()
+  const subscriptionClient = new SubscriptionClient(uri, {
+    lazy: true,
+    reconnect: true,
+    connectionParams: {
+      Authorization: `Bearer ${token}`
+    }
+  }, ws)
+  const link = errorLink.concat(new WebSocketLink(subscriptionClient))
+  const client = new ApolloClient({link, cache})
+
+  return client
+    .subscribe({
+      query: gql`${query_string}`,
+      variables: JSON.parse(variables)
+    })
+}
+
 program
   .version('0.1.0')
 
@@ -112,6 +133,27 @@ program
       .catch(debug)
   })
 
+program
+  .command('subscribe <host> <token> <query> [data]')
+  .alias('s')
+  .action((host, token, query, data) => {
+    debug(`Host: ${host}`)
+    debug(`Token: ${token}`)
+    debug(`Query: ${query}`)
+    debug(`Data: ${data}`)
+    data = data || "{}"
+    const s = subscribe(host, token, query, data).subscribe(
+      result => console.log(JSON.stringify(result)),
+      err => {
+        debug(err)
+        process.exit(1)
+      },
+      () => {
+        debug('Finished')
+        process.exit(0)
+      }
+    )
+  })
 
 program.parse(process.argv)
 

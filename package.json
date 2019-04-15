@@ -24,10 +24,13 @@
     "apollo-client": "^2.5.1",
     "apollo-link-error": "^1.1.10",
     "apollo-link-http": "^1.5.14",
+    "apollo-link-ws": "^1.0.17",
     "commander": "^2.20.0",
     "debug": "^4.1.1",
     "graphql": "^14.2.1",
     "graphql-tag": "^2.10.1",
-    "node-fetch": "^2.3.0"
+    "node-fetch": "^2.3.0",
+    "subscriptions-transport-ws": "^0.9.16",
+    "ws": "^6.2.1"
   }
 }
